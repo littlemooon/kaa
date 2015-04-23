@@ -1,0 +1,24 @@
+{
+  "name": "kaa-simple-example",
+  "version": "0.0.1",
+  "description": "Simple Kaa example",
+  "main": "main.js",
+  "scripts": {
+    "start": "npm run client | npm run serve",
+    "client": "node webpack.server.js",
+    "serve": "node server.js"
+  },
+  "devDependencies": {
+    "react": "^0.12.2",
+    "react-hot-loader": "^1.1.4",
+    "webpack": "^1.5.3",
+    "webpack-dev-server": "^1.7.0"
+  },
+  "dependencies": {
+    "baobab": "^1.0.1",
+    "blueagent": "^1.0.0",
+    "body-parser": "^1.12.3",
+    "express": "^4.12.3",
+    "mowgli": "^0.1.0"
+  }
+}
