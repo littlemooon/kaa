@@ -12,38 +12,42 @@ export default {
 		}
 	},
 
-	reducePaths: function(paths, tree, desc, getFn) {
+	getDefaultAction: (name, value) => {
+		return value === true ? defaultActions[name] : value;
+	},
+
+	reducePaths: (paths, tree, desc, getFn) => {
 		// dont get rekt
 		if (!paths) return {};
 		if (!tree) throw new Error(`No ${desc}s have been passed to your root component`);
 
 		// return a map of each path through the tree
-		return this.mapObj(paths, val => navigatePath(val, tree, desc, getFn));
+		return this.mapObj(paths, val => this.navigatePath(val, tree, desc, getFn));
+	},
+
+	navigatePath: (path, tree, desc, getFn) => {
+		return pathAsArray(path).reduce((obj, key) => {
+			// if we have been given a getter then use it, otherwise treat as an object
+			const value = obj && (getFn ? getFn(obj, key) : obj[key]);
+
+			if (value === undefined) console.warn(`${desc} '${path}' (key: '${key}') cannot be found`);
+
+			// return null if not found
+			return !obj || value === undefined ? null : value;
+		}, tree);
 	},
 
 	mapObj: (obj, fn) => {
 		return Object.keys(obj).reduce((acc, key) => {
-			acc[key] = fn(obj[key]);
+			acc[key] = fn(obj[key], key);
 			return acc;
 		}, {});
-	}
+	},
+
+	callIfFunction: (obj, ...args) => typeof obj === 'function' ? obj(...args) : obj
 };
 
-function navigatePath(path, tree, desc, getFn) {
-	return pathAsArray(path).reduce((obj, key) => {
-		// if we have been given a getter then use it, otherwise treat as an object
-		const value = obj && (getFn ? getFn(obj, key) : obj[key]);
-
-		if (value === undefined) console.warn(`${desc} '${path}' (key: '${key}') cannot be found`);
-
-		// return null if not found
-		return !obj || value === undefined ? null : value;
-	}, tree);
-}
-
-function pathAsArray(path) {
-	return path.constructor === Array ? path : path.split('.');
-}
+const pathAsArray = (path) => path.constructor === Array ? path : path.split('.');
 
 // define api for different tree implementations
 const cursorFns = {
@@ -70,5 +74,21 @@ const cursorFns = {
 	default: {
 		get: (x, key) => x[key],
 		value: x => x
+	}
+};
+
+// define default actions
+const defaultActions = {
+	get: () => {
+		console.log('get');
+	},
+	create: () => {
+		console.log('create');
+	},
+	update: () => {
+		console.log('update');
+	},
+	delete: () => {
+		console.log('delete');
 	}
 };
