@@ -10,16 +10,16 @@ export default React.createClass({
 
 	mixins: [Mixin],
 
-	propTypes: {
-		id: React.PropTypes.number.idRequired
-	},
+	// propTypes: {
+	// 	cId: React.PropTypes.number.idRequired
+	// },
 
 	actions: {
 		edit: 'fruitList.update'
 	},
 
 	_handleClick: function() {
-		this.actions.edit({name: 'Watermelon', color: 'Magical'});
+		this.actions.edit(this.props.cId, {name: 'Watermelon', color: 'Magical'});
 	},
 
 	render: function() {

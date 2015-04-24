@@ -1,35 +1,68 @@
 'use strict';
 
-import {getCursorFns, mapObj, navigatePath, callIfFunction, getDefaultAction} from './helpers';
-
-const defaultActions = ['get', 'create', 'update', 'delete'];
-const keyProps = ['data', 'url', 'actions'];
+import {getCursorFns, mapObj, navigatePath, callIfFunction} from './helpers';
 
 export default class Actions {
 
-	constructor(tree, baseUrl, actions) {
-		this.data = this._getCursor(tree, actions.data);
-		this.url = this._getUrl(baseUrl, actions.url);
+	constructor(tree, baseUrl, definition, defaults) {
+		const cursor = definition.cursor;
+		const url = definition.url;
+		const actions = definition.actions;
 
-		// set actions as methods on this object
-		mapObj(this._getActions(actions.actions), (v, k) => this[k] = v);
+		// set cursor prop to a function returning the cursor
+		cursor && (this.getCursor = getCursorFn(tree, cursor));
 
-		// set all non key props as methods on this object returning a new Actions object
-		mapObj(actions, (v, k) => !keyProps.contains(k) ? this[k] = new Actions(tree, baseUrl, k) : null);
+		// set url prop to a function returning the full url
+		url && (this.getUrl = getUrlFn(tree, cursor, baseUrl, url));
+
+		// set a prop for each action
+		this._setActions__(actions, defaults);
+
+		// set all remaining props on the definition to a prop on this
+		this._setChildren__(tree, baseUrl, definition, defaults);
 	}
 
-	_getActions(actionDefs) {
-		return mapObj(actionDefs, (v, k) =>
-			defaultActions.contains(k) ? getDefaultAction(k, v) : v
+	_setActions__(actions, defaults) {
+		// set a prop on this for each action
+		actions && mapObj(getActions(actions, defaults), (v, k) =>
+			this[k] = v.bind(this)
 		);
 	}
 
-	_getCursor(tree, path) {
-		const getFn = getCursorFns(this._tree).get;
-		return (k, v) => navigatePath(callIfFunction(path, k, v), tree, 'Cursor', getFn);
-	}
+	_setChildren__(tree, baseUrl, definition, defaults) {
+		const keyProps = ['cursor', 'url', 'actions'];
 
-	_getUrl(baseUrl, url) {
-		return (k, v) => baseUrl + callIfFunction(url, k, v);
+		// create a new actions object and set a prop on this for each remaining prop in the definition
+		mapObj(definition, (v, k) =>
+			keyProps.indexOf(k) < 0 ? this[k] = new Actions(tree, baseUrl, v, defaults) : null
+		);
 	}
 }
+
+const getCursorFn = (tree, path) => {
+	const getFn = getCursorFns(tree).get;
+
+	// resolve the cursor and return the value
+	return k => navigatePath(callIfFunction(path, k), tree, 'Cursor', getFn);
+};
+
+const getUrlFn = (tree, path, baseUrl, url) => {
+	const getCursor = getCursorFn(tree, path);
+	const valFn = getCursorFns(tree).value;
+
+	// resolve the url and return the full url
+	return k => baseUrl + callIfFunction(url, k, valFn(getCursor(k)));
+};
+
+const getActions = (actions, defaults) => {
+	// return the map of actions after setting any defaults
+	return mapObj(actions, (v, k) =>
+		v === true ? getDefaultAction(k, defaults) : v
+	);
+};
+
+const getDefaultAction = (name, defaults) => {
+	const defaultAction = defaults && defaults[name];
+	if (!defaultAction) throw new Error(`Default action ${name} used but not specified`);
+	return defaultAction;
+};

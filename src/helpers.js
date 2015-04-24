@@ -12,11 +12,7 @@ export default {
 		}
 	},
 
-	getDefaultAction: (name, value) => {
-		return value === true ? defaultActions[name] : value;
-	},
-
-	reducePaths: (paths, tree, desc, getFn) => {
+	reducePaths: function(paths, tree, desc, getFn) {
 		// dont get rekt
 		if (!paths) return {};
 		if (!tree) throw new Error(`No ${desc}s have been passed to your root component`);
@@ -74,21 +70,5 @@ const cursorFns = {
 	default: {
 		get: (x, key) => x[key],
 		value: x => x
-	}
-};
-
-// define default actions
-const defaultActions = {
-	get: () => {
-		console.log('get');
-	},
-	create: () => {
-		console.log('create');
-	},
-	update: () => {
-		console.log('update');
-	},
-	delete: () => {
-		console.log('delete');
 	}
 };

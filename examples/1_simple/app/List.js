@@ -4,7 +4,6 @@ import React from 'react/addons';
 import {Mixin} from 'mowgli';
 
 const div = React.createFactory('div');
-const p = React.createFactory('p');
 const Title = React.createFactory(require('./Title'));
 const ListItem = React.createFactory(require('./ListItem'));
 const AddButton = React.createFactory(require('./AddButton'));
@@ -15,8 +14,7 @@ export default React.createClass({
 	mixins: [Mixin],
 
 	data: {
-		items: 'fruitList',
-		isLoading: 'list.loading'
+		items: 'fruitList'
 	},
 
 	actions: {
@@ -28,10 +26,8 @@ export default React.createClass({
 	},
 
 	_renderList: function() {
-		if (this.state.isLoading) return p({}, 'Loading..');
-
 		return div({},
-			this.state.items.map((item, i) =>
+			this.state.items && this.state.items.map((item, i) =>
 				ListItem({key: i, id: item.id, name: item.name, color: item.color})
 			),
 			AddButton()

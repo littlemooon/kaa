@@ -10,9 +10,9 @@ export default React.createClass({
 
 	mixins: [Mixin],
 
-	propTypes: {
-		id: React.PropTypes.number.idRequired
-	},
+	// propTypes: {
+	// 	id: React.PropTypes.number.idRequired
+	// },
 
 	actions: {
 		remove: 'fruitList.delete'
