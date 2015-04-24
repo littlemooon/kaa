@@ -1,7 +1,7 @@
 {
   "name": "kaa",
   "version": "0.0.1",
-  "description": "Tree implementation independent actions wrapper for use with Mowgli",
+  "description": "Actions wrapper for React JS, Mowgli and The Jungle",
   "main": "index.js",
   "scripts": {
     "start": "webpack --progress --colors --watch"
@@ -19,9 +19,15 @@
     "url": "https://github.com/littlemooon/kaa.git"
   },
   "keywords": [
-    "mowgli",
     "react",
-    "flux"
+    "flux",
+    "baobab",
+    "cortex",
+    "immstruct",
+    "cursor",
+    "om",
+    "mowgli",
+    "jungle"
   ],
   "author": "Fred Wright",
   "license": "MIT"
