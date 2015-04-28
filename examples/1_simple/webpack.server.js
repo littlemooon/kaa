@@ -42,9 +42,8 @@ var config = {
 
     noParse: [
       /node_modules\/cortex/,
-      /the-jungle-common/,
-      /mowgli/,
-      /kaa/
+      /node_modules\/the-jungle-common/,
+      /node_modules\/mowgli/
     ]
   }
 };
