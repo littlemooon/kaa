@@ -1,30 +1,26 @@
 {
   "name": "kaa",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Actions wrapper for React JS, Mowgli and The Jungle",
-  "main": "kaa.js",
+  "main": "dist/index.js",
   "scripts": {
-    "start": "webpack --progress --colors --watch",
+    "build": "babel -d dist ./src",
     "test": "./node_modules/karma/bin/karma start"
   },
   "dependencies": {
     "the-jungle-common": "^0.1.0"
   },
   "devDependencies": {
-    "babel-core": "^5.1.10",
+    "babel-core": "^5.1.13",
     "babel-loader": "^5.0.0",
     "chai": "^2.3.0",
-    "eslint": "^0.19.0",
-    "eslint-loader": "^0.10.0",
     "karma": "^0.12.31",
     "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^0.1.8",
     "karma-mocha": "^0.1.10",
     "karma-sourcemap-loader": "^0.3.4",
     "karma-webpack": "^1.5.0",
-    "mocha": "^2.2.4",
-    "react-hot-loader": "^1.2.5",
-    "webpack": "^1.8.5"
+    "mocha": "^2.2.4"
   },
   "repository": {
     "type": "git",

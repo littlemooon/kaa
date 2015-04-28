@@ -38,12 +38,6 @@ var config = {
 
     loaders: [
       { test: /\.js$/, loaders: ['react-hot', 'babel'], exclude: /node_modules/ }
-    ],
-
-    noParse: [
-      /node_modules\/cortex/,
-      /node_modules\/the-jungle-common/,
-      /node_modules\/mowgli/
     ]
   }
 };

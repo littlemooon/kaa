@@ -1,6 +1,6 @@
 'use strict';
 
-import Actions from './src/Actions';
+import Actions from './Actions';
 
 export default {
 	Actions

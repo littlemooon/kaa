@@ -1,6 +1,6 @@
 {
   "name": "kaa-simple-example",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Simple Kaa example",
   "main": "main.js",
   "scripts": {
@@ -9,6 +9,10 @@
     "serve": "node server.js"
   },
   "devDependencies": {
+    "babel-core": "^5.1.13",
+    "babel-loader": "^5.0.0",
+    "eslint": "^0.20.0",
+    "eslint-loader": "^0.11.1",
     "react": "^0.12.2",
     "react-hot-loader": "^1.1.4",
     "webpack": "^1.5.3",
@@ -20,6 +24,6 @@
     "body-parser": "^1.12.3",
     "express": "^4.12.3",
     "mowgli": "^0.1.0",
-    "kaa": "^0.0.1"
+    "kaa": "^0.1.0"
   }
 }
