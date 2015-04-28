@@ -53,7 +53,7 @@
 
 	'use strict';
 
-	var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
+	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
 
 	Object.defineProperty(exports, '__esModule', {
 		value: true
@@ -61,7 +61,7 @@
 
 	var _Actions = __webpack_require__(2);
 
-	var _Actions2 = _interopRequireWildcard(_Actions);
+	var _Actions2 = _interopRequireDefault(_Actions);
 
 	'use strict';
 
@@ -180,175 +180,232 @@
 /* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	/******/ (function(modules) { // webpackBootstrap
+	/******/ 	// The module cache
+	/******/ 	var installedModules = {};
 
-	var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
+	/******/ 	// The require function
+	/******/ 	function __webpack_require__(moduleId) {
 
-	var _defaults = function (obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; };
+	/******/ 		// Check if module is in cache
+	/******/ 		if(installedModules[moduleId])
+	/******/ 			return installedModules[moduleId].exports;
 
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-	'use strict';
+	/******/ 		// Create a new module (and put it into the cache)
+	/******/ 		var module = installedModules[moduleId] = {
+	/******/ 			exports: {},
+	/******/ 			id: moduleId,
+	/******/ 			loaded: false
+	/******/ 		};
 
-	var _srcGeneral = __webpack_require__(4);
+	/******/ 		// Execute the module function
+	/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
 
-	_defaults(exports, _interopRequireWildcard(_srcGeneral));
+	/******/ 		// Flag the module as loaded
+	/******/ 		module.loaded = true;
 
-	var _srcPaths = __webpack_require__(5);
+	/******/ 		// Return the exports of the module
+	/******/ 		return module.exports;
+	/******/ 	}
 
-	_defaults(exports, _interopRequireWildcard(_srcPaths));
 
-	var _srcCursors = __webpack_require__(6);
+	/******/ 	// expose the modules object (__webpack_modules__)
+	/******/ 	__webpack_require__.m = modules;
 
-	_defaults(exports, _interopRequireWildcard(_srcCursors));
+	/******/ 	// expose the module cache
+	/******/ 	__webpack_require__.c = installedModules;
 
-/***/ },
-/* 4 */
-/***/ function(module, exports, __webpack_require__) {
+	/******/ 	// __webpack_public_path__
+	/******/ 	__webpack_require__.p = "";
 
-	'use strict';
+	/******/ 	// Load entry module and return exports
+	/******/ 	return __webpack_require__(0);
+	/******/ })
+	/************************************************************************/
+	/******/ ([
+	/* 0 */
+	/***/ function(module, exports, __webpack_require__) {
 
-	Object.defineProperty(exports, '__esModule', {
-		value: true
-	});
-	'use strict';
+		module.exports = __webpack_require__(1);
 
-	exports['default'] = {
-		mapObj: function mapObj(obj, fn) {
-			return Object.keys(obj).reduce(function (acc, key) {
-				acc[key] = fn(obj[key], key);
-				return acc;
-			}, {});
-		},
 
-		callIfFunction: function callIfFunction(obj) {
-			for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-				args[_key - 1] = arguments[_key];
-			}
+	/***/ },
+	/* 1 */
+	/***/ function(module, exports, __webpack_require__) {
 
-			return typeof obj === 'function' ? obj.apply(undefined, args) : obj;
-		},
+		'use strict';
 
-		throwError: function throwError(err) {
-			throw new Error(err);
-		}
-	};
-	module.exports = exports['default'];
+		Object.defineProperty(exports, '__esModule', {
+			value: true
+		});
 
-/***/ },
-/* 5 */
-/***/ function(module, exports, __webpack_require__) {
+		var _mapObj$callIfFunction$throwError = __webpack_require__(2);
 
-	'use strict';
+		var _reducePaths$navigatePath = __webpack_require__(3);
 
-	Object.defineProperty(exports, '__esModule', {
-		value: true
-	});
+		var _getCursorFns = __webpack_require__(4);
 
-	var _mapObj = __webpack_require__(4);
+		'use strict';
 
-	'use strict';
+		exports['default'] = {
+			mapObj: _mapObj$callIfFunction$throwError.mapObj,
+			callIfFunction: _mapObj$callIfFunction$throwError.callIfFunction,
+			throwError: _mapObj$callIfFunction$throwError.throwError,
+			reducePaths: _reducePaths$navigatePath.reducePaths,
+			navigatePath: _reducePaths$navigatePath.navigatePath,
+			getCursorFns: _getCursorFns.getCursorFns
+		};
+		module.exports = exports['default'];
 
-	exports['default'] = {
-		reducePaths: function reducePaths(paths, tree, desc, getFn) {
-			var _this = this;
+	/***/ },
+	/* 2 */
+	/***/ function(module, exports, __webpack_require__) {
 
-			// dont get rekt
-			if (!paths) {
-				return {};
-			}if (!tree) throw new Error('No ' + desc + 's have been passed to your root component');
+		'use strict';
 
-			// return a map of each path through the tree
-			return _mapObj.mapObj(paths, function (val) {
-				return _this.navigatePath(val, tree, desc, getFn);
-			});
-		},
+		Object.defineProperty(exports, '__esModule', {
+			value: true
+		});
+		'use strict';
 
-		navigatePath: function navigatePath(path, tree, desc, getFn) {
-			return pathAsArray(path).reduce(function (obj, key) {
-				// if we have been given a getter then use it, otherwise treat as an object
-				var value = obj && (getFn ? getFn(obj, key) : obj[key]);
-
-				// return null if not found
-				return !obj || value === undefined ? null : value;
-			}, tree);
-		}
-	};
-
-	var pathAsArray = function pathAsArray(path) {
-		return path.constructor === Array ? path : path.split('.');
-	};
-	module.exports = exports['default'];
-
-/***/ },
-/* 6 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-		value: true
-	});
-	'use strict';
-
-	exports['default'] = {
-		getCursorFns: function getCursorFns(cursor) {
-			switch (cursor.constructor.name) {
-				case 'Cortex':
-					return cursorFns.cortex;
-				case 'Baobab':
-					return cursorFns.baobab;
-				default:
-					return cursorFns['default'];
-			}
-		}
-	};
-
-	// define api for different tree implementations
-	var cursorFns = {
-		cortex: {
-			get: function get(x, key) {
-				return x[key];
+		exports['default'] = {
+			mapObj: function mapObj(obj, fn) {
+				return Object.keys(obj).reduce(function (acc, key) {
+					acc[key] = fn(obj[key], key);
+					return acc;
+				}, {});
 			},
-			value: function value(x) {
-				return x.val();
+
+			callIfFunction: function callIfFunction(obj) {
+				for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+					args[_key - 1] = arguments[_key];
+				}
+
+				return typeof obj === 'function' ? obj.apply(undefined, args) : obj;
+			},
+
+			throwError: function throwError(err) {
+				throw new Error(err);
 			}
-		},
-		baobab: {
-			get: function get(x, key) {
-				return x.select(key);
+		};
+		module.exports = exports['default'];
+
+	/***/ },
+	/* 3 */
+	/***/ function(module, exports, __webpack_require__) {
+
+		'use strict';
+
+		Object.defineProperty(exports, '__esModule', {
+			value: true
+		});
+
+		var _mapObj = __webpack_require__(2);
+
+		'use strict';
+
+		exports['default'] = {
+			reducePaths: function reducePaths(paths, tree, desc, getFn) {
+				var _this = this;
+
+				// dont get rekt
+				if (!paths) {
+					return {};
+				}if (!tree) throw new Error('No ' + desc + 's have been passed to your root component');
+
+				// return a map of each path through the tree
+				return _mapObj.mapObj(paths, function (val) {
+					return _this.navigatePath(val, tree, desc, getFn);
+				});
 			},
-			value: function value(x) {
-				return x.get();
-			},
-			on: function on(x, cb) {
-				return x.on('update', cb);
-			},
-			off: function off(x, cb) {
-				return x.off('update', cb);
+
+			navigatePath: function navigatePath(path, tree, desc, getFn) {
+				return pathAsArray(path).reduce(function (obj, key) {
+					// if we have been given a getter then use it, otherwise treat as an object
+					var value = obj && (getFn ? getFn(obj, key) : obj[key]);
+
+					// return null if not found
+					return !obj || value === undefined ? null : value;
+				}, tree);
 			}
-		},
-		// immstruct: {
-		// 	get: (x, key) => x.cursor(key),
-		// 	value: x => x.deref(),
-		// 	on: (x, cb) => x.on('swap', cb),
-		// 	off: (x, cb) => x.off('swap', cb)
-		// },
-		// reactCursor: {
-		// 	get: (x, key) => x.refine(key),
-		// 	value: x => x.value
-		// },
-		'default': {
-			get: function get(x, key) {
-				return x[key];
-			},
-			value: function value(x) {
-				return x;
+		};
+
+		var pathAsArray = function pathAsArray(path) {
+			return path.constructor === Array ? path : path.split('.');
+		};
+		module.exports = exports['default'];
+
+	/***/ },
+	/* 4 */
+	/***/ function(module, exports, __webpack_require__) {
+
+		'use strict';
+
+		Object.defineProperty(exports, '__esModule', {
+			value: true
+		});
+		'use strict';
+
+		exports['default'] = {
+			getCursorFns: function getCursorFns(cursor) {
+				switch (cursor.constructor.name) {
+					case 'Cortex':
+						return cursorFns.cortex;
+					case 'Baobab':
+						return cursorFns.baobab;
+					default:
+						return cursorFns['default'];
+				}
 			}
-		}
-	};
-	module.exports = exports['default'];
+		};
+
+		// define api for different tree implementations
+		var cursorFns = {
+			cortex: {
+				get: function get(x, key) {
+					return x[key];
+				},
+				value: function value(x) {
+					return x.val();
+				}
+			},
+			baobab: {
+				get: function get(x, key) {
+					return x.select(key);
+				},
+				value: function value(x) {
+					return x.get();
+				},
+				on: function on(x, cb) {
+					return x.on('update', cb);
+				},
+				off: function off(x, cb) {
+					return x.off('update', cb);
+				}
+			},
+			// immstruct: {
+			// 	get: (x, key) => x.cursor(key),
+			// 	value: x => x.deref(),
+			// 	on: (x, cb) => x.on('swap', cb),
+			// 	off: (x, cb) => x.off('swap', cb)
+			// },
+			// reactCursor: {
+			// 	get: (x, key) => x.refine(key),
+			// 	value: x => x.value
+			// },
+			'default': {
+				get: function get(x, key) {
+					return x[key];
+				},
+				value: function value(x) {
+					return x;
+				}
+			}
+		};
+		module.exports = exports['default'];
+
+	/***/ }
+	/******/ ]);
 
 /***/ }
 /******/ ]);
