@@ -1,6 +1,6 @@
 {
   "name": "kaa",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Actions wrapper for React JS, Mowgli and The Jungle",
   "main": "index.js",
   "scripts": {

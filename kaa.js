@@ -84,54 +84,58 @@
 		value: true
 	});
 
-	var _getCursorFns$mapObj$navigatePath$callIfFunction$getDefaultAction = __webpack_require__(3);
+	var _getCursorFns$mapObj$navigatePath$callIfFunction$throwError = __webpack_require__(3);
 
 	'use strict';
 
-	var defaultActions = ['get', 'create', 'update', 'delete'];
-	var keyProps = ['data', 'url', 'actions'];
-
 	var Actions = (function () {
-		function Actions(tree, baseUrl, actions) {
-			var _this = this;
-
+		function Actions(tree, baseUrl, definition, defaults) {
 			_classCallCheck(this, Actions);
 
-			this.data = this._getCursor(tree, actions.data);
-			this.url = this._getUrl(baseUrl, actions.url);
+			if (!tree) _getCursorFns$mapObj$navigatePath$callIfFunction$throwError.throwError('Must provide a tree object to Actions that encapsulates all application state');
 
-			// set actions as methods on this object
-			_getCursorFns$mapObj$navigatePath$callIfFunction$getDefaultAction.mapObj(this._getActions(actions.actions), function (v, k) {
-				return _this[k] = v;
-			});
+			var _ref = definition ? definition : _getCursorFns$mapObj$navigatePath$callIfFunction$throwError.throwError('Must provide a definition object to Actions that details all actions over the tree');
 
-			// set all non key props as methods on this object returning a new Actions object
-			_getCursorFns$mapObj$navigatePath$callIfFunction$getDefaultAction.mapObj(actions, function (v, k) {
-				return !keyProps.contains(k) ? _this[k] = new Actions(tree, baseUrl, k) : null;
-			});
+			var path = _ref.path;
+			var url = _ref.url;
+			var actions = _ref.actions;
+
+			// set cursor prop to a function returning the cursor
+			path && (this.getCursor = getCursorFn(tree, path));
+
+			// set url prop to a function returning the full url
+			url && (this.getUrl = getUrlFn(tree, path, baseUrl, url));
+
+			// set a prop for each action
+			actions && this._setActions__(actions, defaults);
+
+			// set all remaining props on the definition to a prop on this
+			this._setChildren__(tree, baseUrl, definition, defaults);
 		}
 
 		_createClass(Actions, [{
-			key: '_getActions',
-			value: function _getActions(actionDefs) {
-				return _getCursorFns$mapObj$navigatePath$callIfFunction$getDefaultAction.mapObj(actionDefs, function (v, k) {
-					return defaultActions.contains(k) ? _getCursorFns$mapObj$navigatePath$callIfFunction$getDefaultAction.getDefaultAction(k, v) : v;
+			key: '_setActions__',
+			value: function _setActions__(actions, defaults) {
+				var _this = this;
+
+				if (typeof actions !== 'object') _getCursorFns$mapObj$navigatePath$callIfFunction$throwError.throwError('Defined actions must to be an object');
+
+				// set a prop on this for each action
+				_getCursorFns$mapObj$navigatePath$callIfFunction$throwError.mapObj(getActions(actions, defaults), function (v, k) {
+					return _this[k] = typeof v === 'function' ? v.bind(_this) : _getCursorFns$mapObj$navigatePath$callIfFunction$throwError.throwError('Action \'' + k + '\' must be a function');
 				});
 			}
 		}, {
-			key: '_getCursor',
-			value: function _getCursor(tree, path) {
-				var getFn = _getCursorFns$mapObj$navigatePath$callIfFunction$getDefaultAction.getCursorFns(this._tree).get;
-				return function (k, v) {
-					return _getCursorFns$mapObj$navigatePath$callIfFunction$getDefaultAction.navigatePath(_getCursorFns$mapObj$navigatePath$callIfFunction$getDefaultAction.callIfFunction(path, k, v), tree, 'Cursor', getFn);
-				};
-			}
-		}, {
-			key: '_getUrl',
-			value: function _getUrl(baseUrl, url) {
-				return function (k, v) {
-					return baseUrl + _getCursorFns$mapObj$navigatePath$callIfFunction$getDefaultAction.callIfFunction(url, k, v);
-				};
+			key: '_setChildren__',
+			value: function _setChildren__(tree, baseUrl, definition, defaults) {
+				var _this2 = this;
+
+				var keyProps = ['path', 'url', 'actions'];
+
+				// create a new actions object and set a prop on this for each remaining prop in the definition
+				_getCursorFns$mapObj$navigatePath$callIfFunction$throwError.mapObj(definition, function (v, k) {
+					return keyProps.indexOf(k) < 0 ? _this2[k] = new Actions(tree, baseUrl, v, defaults) : null;
+				});
 			}
 		}]);
 
@@ -139,10 +143,146 @@
 	})();
 
 	exports['default'] = Actions;
+
+	var getCursorFn = function getCursorFn(tree, path) {
+		var getFn = _getCursorFns$mapObj$navigatePath$callIfFunction$throwError.getCursorFns(tree).get;
+
+		// resolve the cursor and return the value
+		return function (k) {
+			return _getCursorFns$mapObj$navigatePath$callIfFunction$throwError.navigatePath(_getCursorFns$mapObj$navigatePath$callIfFunction$throwError.callIfFunction(path, k), tree, 'Cursor', getFn);
+		};
+	};
+
+	var getUrlFn = function getUrlFn(tree, path, baseUrl, url) {
+		var getCursor = path && getCursorFn(tree, path);
+		var valFn = _getCursorFns$mapObj$navigatePath$callIfFunction$throwError.getCursorFns(tree).value;
+
+		// resolve the url and return the full url
+		return function (k) {
+			return baseUrl + _getCursorFns$mapObj$navigatePath$callIfFunction$throwError.callIfFunction(url, k, getCursor && valFn(getCursor(k)));
+		};
+	};
+
+	var getActions = function getActions(actions, defaults) {
+		// return the map of actions after setting any defaults
+		return _getCursorFns$mapObj$navigatePath$callIfFunction$throwError.mapObj(actions, function (v, k) {
+			return v === true ? getDefaultAction(k, defaults) : v;
+		});
+	};
+
+	var getDefaultAction = function getDefaultAction(name, defaults) {
+		var defaultAction = defaults && defaults[name];
+		return defaultAction ? defaultAction : _getCursorFns$mapObj$navigatePath$callIfFunction$throwError.throwError('Default action \'' + name + '\' used but not defined');
+	};
 	module.exports = exports['default'];
 
 /***/ },
 /* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
+
+	var _defaults = function (obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; };
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	'use strict';
+
+	var _srcGeneral = __webpack_require__(4);
+
+	_defaults(exports, _interopRequireWildcard(_srcGeneral));
+
+	var _srcPaths = __webpack_require__(5);
+
+	_defaults(exports, _interopRequireWildcard(_srcPaths));
+
+	var _srcCursors = __webpack_require__(6);
+
+	_defaults(exports, _interopRequireWildcard(_srcCursors));
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+		value: true
+	});
+	'use strict';
+
+	exports['default'] = {
+		mapObj: function mapObj(obj, fn) {
+			return Object.keys(obj).reduce(function (acc, key) {
+				acc[key] = fn(obj[key], key);
+				return acc;
+			}, {});
+		},
+
+		callIfFunction: function callIfFunction(obj) {
+			for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+				args[_key - 1] = arguments[_key];
+			}
+
+			return typeof obj === 'function' ? obj.apply(undefined, args) : obj;
+		},
+
+		throwError: function throwError(err) {
+			throw new Error(err);
+		}
+	};
+	module.exports = exports['default'];
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+		value: true
+	});
+
+	var _mapObj = __webpack_require__(4);
+
+	'use strict';
+
+	exports['default'] = {
+		reducePaths: function reducePaths(paths, tree, desc, getFn) {
+			var _this = this;
+
+			// dont get rekt
+			if (!paths) {
+				return {};
+			}if (!tree) throw new Error('No ' + desc + 's have been passed to your root component');
+
+			// return a map of each path through the tree
+			return _mapObj.mapObj(paths, function (val) {
+				return _this.navigatePath(val, tree, desc, getFn);
+			});
+		},
+
+		navigatePath: function navigatePath(path, tree, desc, getFn) {
+			return pathAsArray(path).reduce(function (obj, key) {
+				// if we have been given a getter then use it, otherwise treat as an object
+				var value = obj && (getFn ? getFn(obj, key) : obj[key]);
+
+				// return null if not found
+				return !obj || value === undefined ? null : value;
+			}, tree);
+		}
+	};
+
+	var pathAsArray = function pathAsArray(path) {
+		return path.constructor === Array ? path : path.split('.');
+	};
+	module.exports = exports['default'];
+
+/***/ },
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -162,54 +302,7 @@
 				default:
 					return cursorFns['default'];
 			}
-		},
-
-		getDefaultAction: function getDefaultAction(name, value) {
-			return value === true ? defaultActions[name] : value;
-		},
-
-		reducePaths: function reducePaths(paths, tree, desc, getFn) {
-			// dont get rekt
-			if (!paths) {
-				return {};
-			}if (!tree) throw new Error('No ' + desc + 's have been passed to your root component');
-
-			// return a map of each path through the tree
-			return undefined.mapObj(paths, function (val) {
-				return undefined.navigatePath(val, tree, desc, getFn);
-			});
-		},
-
-		navigatePath: function navigatePath(path, tree, desc, getFn) {
-			return pathAsArray(path).reduce(function (obj, key) {
-				// if we have been given a getter then use it, otherwise treat as an object
-				var value = obj && (getFn ? getFn(obj, key) : obj[key]);
-
-				if (value === undefined) console.warn('' + desc + ' \'' + path + '\' (key: \'' + key + '\') cannot be found');
-
-				// return null if not found
-				return !obj || value === undefined ? null : value;
-			}, tree);
-		},
-
-		mapObj: function mapObj(obj, fn) {
-			return Object.keys(obj).reduce(function (acc, key) {
-				acc[key] = fn(obj[key], key);
-				return acc;
-			}, {});
-		},
-
-		callIfFunction: function callIfFunction(obj) {
-			for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-				args[_key - 1] = arguments[_key];
-			}
-
-			return typeof obj === 'function' ? obj.apply(undefined, args) : obj;
 		}
-	};
-
-	var pathAsArray = function pathAsArray(path) {
-		return path.constructor === Array ? path : path.split('.');
 	};
 
 	// define api for different tree implementations
@@ -236,28 +329,16 @@
 				return x.off('update', cb);
 			}
 		},
-		immstruct: {
-			get: function get(x, key) {
-				return x.cursor(key);
-			},
-			value: function value(x) {
-				return x.deref();
-			},
-			on: function on(x, cb) {
-				return x.on('swap', cb);
-			},
-			off: function off(x, cb) {
-				return x.off('swap', cb);
-			}
-		},
-		reactCursor: {
-			get: function get(x, key) {
-				return x.refine(key);
-			},
-			value: function value(x) {
-				return x.value;
-			}
-		},
+		// immstruct: {
+		// 	get: (x, key) => x.cursor(key),
+		// 	value: x => x.deref(),
+		// 	on: (x, cb) => x.on('swap', cb),
+		// 	off: (x, cb) => x.off('swap', cb)
+		// },
+		// reactCursor: {
+		// 	get: (x, key) => x.refine(key),
+		// 	value: x => x.value
+		// },
 		'default': {
 			get: function get(x, key) {
 				return x[key];
@@ -265,22 +346,6 @@
 			value: function value(x) {
 				return x;
 			}
-		}
-	};
-
-	// define default actions
-	var defaultActions = {
-		get: function get() {
-			console.log('get');
-		},
-		create: function create() {
-			console.log('create');
-		},
-		update: function update() {
-			console.log('update');
-		},
-		'delete': function _delete() {
-			console.log('delete');
 		}
 	};
 	module.exports = exports['default'];

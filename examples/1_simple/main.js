@@ -36,7 +36,7 @@ const defaultActions = {
 // define actions on data
 const actions = new Actions(tree, 'http://localhost:3000/api/', {
   fruitList: {
-    cursor: 'fruitList',
+    path: 'fruitList',
     url: 'fruit',
     actions: {
       get: true,
@@ -44,7 +44,7 @@ const actions = new Actions(tree, 'http://localhost:3000/api/', {
       log: (action) => console.log(`Calling '${action}' on fruitList`)
     },
     item: {
-      cursor: k => `fruitList.${k}`,
+      path: k => `fruitList.${k}`,
       url: (k, v) => `fruit/${v.id}`,
       actions: {
         update: true,
