@@ -1,6 +1,6 @@
 'use strict';
 
-import j, {getCursorFns, mapObj, navigatePath, callIfFunction, throwError} from 'the-jungle-common';
+import {getCursorFns, mapObj, navigatePath, callIfFunction, throwError} from 'the-jungle-common';
 
 export default class Actions {
 
@@ -32,7 +32,7 @@ export default class Actions {
 
 	_setChildren__(tree, baseUrl, definition, defaults) {
 		const keyProps = ['path', 'url', 'actions'];
-		console.log(j);
+
 		// create a new actions object and set a prop on this for each remaining prop in the definition
 		mapObj(definition, (v, k) =>
 			keyProps.indexOf(k) < 0 ? this[k] = new Actions(tree, baseUrl, v, defaults) : null
