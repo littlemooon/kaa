@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import {RootMixin} from 'mowgli';
+import {RootMixin} from 'the-jungle';
 
 const List = React.createFactory(require('./List'));
 

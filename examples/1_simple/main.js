@@ -1,8 +1,8 @@
 'use strict';
 
 import React from 'react';
-import Baobab from 'Baobab';
-import {Actions} from 'kaa';
+import Baobab from 'baobab';
+import {Actions} from 'the-jungle';
 
 const App = React.createFactory(require('./app/App'));
 

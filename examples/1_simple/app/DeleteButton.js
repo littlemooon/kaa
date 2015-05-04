@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import {Mixin} from 'mowgli';
+import {Mixin} from 'the-jungle';
 
 const button = React.createFactory('button');
 

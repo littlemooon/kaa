@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import {Mixin} from 'mowgli';
+import {Mixin} from 'the-jungle';
 
 const div = React.createFactory('div');
 const Title = React.createFactory(require('./Title'));

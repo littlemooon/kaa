@@ -4,7 +4,7 @@
   "description": "Actions wrapper for React JS, Mowgli and The Jungle",
   "main": "dist/index.js",
   "scripts": {
-    "build": "babel -d dist ./src",
+    "build": "babel -w -d dist ./src",
     "test": "./node_modules/karma/bin/karma start"
   },
   "dependencies": {
