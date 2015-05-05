@@ -5,10 +5,10 @@ describe('Actions', () => {
 
 	describe('constructor', () => {
 		it('must be passed a tree', () => {
-			() => new Actions().should.throw(`Must provide a tree object to Actions that encapsulates all application state`);
+			expect(() => new Actions()).to.throw(`Must provide a tree object to Actions that encapsulates all application state`);
 		});
 		it('must be passed a definition', () => {
-			() => new Actions({}, '').should.throw(`Must provide a definition object to Actions that details all actions over the tree`);
+			expect(() => new Actions({}, '')).to.throw(`Must provide a definition object to Actions that details all actions over the tree`);
 		});
 	});
 
@@ -91,10 +91,10 @@ describe('Actions', () => {
 
 	describe('action functions', () => {
 		it('should throw an error on construction if actions is not an object', () => {
-			() => new Actions({}, '', {actions: 123}).should.throw(`Defined actions must to be an object`);
+			expect(() => new Actions({}, '', {actions: 123})).to.throw(`Defined actions must to be an object`);
 		});
 		it('should throw an error on construction if not a function', () => {
-			() => new Actions({}, '', {actions: {qwe: 123}}).should.throw(`Action 'qwe' must be a function`);
+			expect(() => new Actions({}, '', {actions: {qwe: 123}})).to.throw(`Action 'qwe' must be a function`);
 		});
 		it('should run the function on execution', () => {
 			const a = new Actions({}, '', {actions: {qwe: x => `action ${x}`}});
@@ -108,7 +108,7 @@ describe('Actions', () => {
 
 	describe('default actions', () => {
 		it('should throw an error on construction if not defined', () => {
-			() => new Actions({}, '', {actions: {qwe: true}}).should.throw(`Default action 'qwe' used but not defined`);
+			expect(() => new Actions({}, '', {actions: {qwe: true}})).to.throw(`Default action 'qwe' used but not defined`);
 		});
 		it('should be applied if the action is exactly true', () => {
 			const a = new Actions({}, '', {actions: {qwe: true}}, {qwe: x => `default ${x}`});

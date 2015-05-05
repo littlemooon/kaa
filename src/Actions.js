@@ -44,7 +44,7 @@ const getCursorFn = (tree, path) => {
 	const getFn = getCursorFns(tree).get;
 
 	// resolve the cursor and return the value
-	return k => navigatePath(callIfFunction(path, k), tree, 'Cursor', getFn);
+	return k => navigatePath(callIfFunction(path, k), tree, getFn);
 };
 
 const getUrlFn = (tree, path, baseUrl, url) => {
