@@ -23,6 +23,6 @@
     "blueagent": "^1.0.0",
     "body-parser": "^1.12.3",
     "express": "^4.12.3",
-    "the-jungle": "^0.1.0"
+    "junglejs": "^0.1.0"
   }
 }
