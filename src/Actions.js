@@ -1,6 +1,6 @@
 'use strict';
 
-import {getCursorFns, mapObj, navigatePath, callIfFunction, throwError} from 'the-jungle-common';
+import {getCursorFns, mapObj, navigatePath, callIfFunction, throwError} from 'junglejs-common';
 
 export default class Actions {
 

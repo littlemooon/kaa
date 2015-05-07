@@ -8,7 +8,7 @@ Object.defineProperty(exports, '__esModule', {
 	value: true
 });
 
-var _getCursorFns$mapObj$navigatePath$callIfFunction$throwError = require('the-jungle-common');
+var _getCursorFns$mapObj$navigatePath$callIfFunction$throwError = require('junglejs-common');
 
 'use strict';
 
@@ -73,7 +73,7 @@ var getCursorFn = function getCursorFn(tree, path) {
 
 	// resolve the cursor and return the value
 	return function (k) {
-		return _getCursorFns$mapObj$navigatePath$callIfFunction$throwError.navigatePath(_getCursorFns$mapObj$navigatePath$callIfFunction$throwError.callIfFunction(path, k), tree, 'Cursor', getFn);
+		return _getCursorFns$mapObj$navigatePath$callIfFunction$throwError.navigatePath(_getCursorFns$mapObj$navigatePath$callIfFunction$throwError.callIfFunction(path, k), tree, getFn);
 	};
 };
 
