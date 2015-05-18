@@ -12,6 +12,14 @@ describe('Actions', () => {
 		});
 	});
 
+	describe('getTree function', () => {
+		it('should be defined', () => {
+			const tree = {qwe: 123};
+			const a = new Actions(tree, '', {});
+			a.getTree().should.eql(tree);
+		});
+	});
+
 	describe('getCursor function', () => {
 		it('should not be defined if no path definition has been provided', () => {
 			const a = new Actions({}, '', {other: {}});
@@ -138,6 +146,11 @@ describe('Actions', () => {
 			const a = new Actions({asd: {qwe: 123}}, '', {qwe: {path: 'asd.qwe'}});
 			a.qwe.getCursor().should.eql(123);
 		});
+		it('should have access to the entire tree', () => {
+			const tree = {asd: {qwe: 123}};
+			const a = new Actions(tree, '', {qwe: {path: 'asd.qwe'}});
+			a.qwe.getTree().should.eql(tree);
+		});
 		it('should have an encapsulated url definition', () => {
 			const a = new Actions({}, '', {qwe: {url: 'theUrl'}});
 			expect(a.getUrl).to.not.exist;
@@ -156,7 +169,7 @@ describe('Actions', () => {
 		it('should have encapsulated child definitions', () => {
 			const a = new Actions({}, '', {qwe: {asd: {}}});
 			expect(a.asd).to.not.exist;
-			a.qwe.asd.should.eql({});
+			a.qwe.asd.should.exist;
 		});
 		it('should be created with the default actions', () => {
 			const a = new Actions({}, '', {qwe: {actions: {asd: true}}}, {asd: x => `default ${x}`});

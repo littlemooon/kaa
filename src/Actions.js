@@ -8,6 +8,9 @@ export default class Actions {
 		if (!tree) throwError(`Must provide a tree object to Actions that encapsulates all application state`);
 		const {path, url, actions} = definition ? definition : throwError(`Must provide a definition object to Actions that details all actions over the tree`);
 
+		// give actions access to the whole tree
+		this.getTree = () => tree;
+
 		// set cursor prop to a function returning the cursor
 		path && (this.getCursor = getCursorFn(tree, path));
 

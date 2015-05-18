@@ -24,6 +24,11 @@ var Actions = (function () {
 		var url = _ref.url;
 		var actions = _ref.actions;
 
+		// give actions access to the whole tree
+		this.getTree = function () {
+			return tree;
+		};
+
 		// set cursor prop to a function returning the cursor
 		path && (this.getCursor = getCursorFn(tree, path));
 
