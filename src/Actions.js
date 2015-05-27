@@ -47,15 +47,12 @@ const getCursorFn = (tree, path) => {
 	const getFn = getCursorFns(tree).get;
 
 	// resolve the cursor and return the value
-	return k => navigatePath(callIfFunction(path, k), tree, getFn);
+	return (...args) => navigatePath(callIfFunction(path, ...args), tree, getFn);
 };
 
 const getUrlFn = (tree, path, baseUrl, url) => {
-	const getCursor = path && getCursorFn(tree, path);
-	const valFn = getCursorFns(tree).value;
-
 	// resolve the url and return the full url
-	return k => baseUrl + callIfFunction(url, k, getCursor && valFn(getCursor(k)));
+	return (...args) => baseUrl + callIfFunction(url, ...args);
 };
 
 const getActions = (actions, defaults) => {

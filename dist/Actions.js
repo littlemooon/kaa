@@ -77,18 +77,23 @@ var getCursorFn = function getCursorFn(tree, path) {
 	var getFn = _getCursorFns$mapObj$navigatePath$callIfFunction$throwError.getCursorFns(tree).get;
 
 	// resolve the cursor and return the value
-	return function (k) {
-		return _getCursorFns$mapObj$navigatePath$callIfFunction$throwError.navigatePath(_getCursorFns$mapObj$navigatePath$callIfFunction$throwError.callIfFunction(path, k), tree, getFn);
+	return function () {
+		for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+			args[_key] = arguments[_key];
+		}
+
+		return _getCursorFns$mapObj$navigatePath$callIfFunction$throwError.navigatePath(_getCursorFns$mapObj$navigatePath$callIfFunction$throwError.callIfFunction.apply(undefined, [path].concat(args)), tree, getFn);
 	};
 };
 
 var getUrlFn = function getUrlFn(tree, path, baseUrl, url) {
-	var getCursor = path && getCursorFn(tree, path);
-	var valFn = _getCursorFns$mapObj$navigatePath$callIfFunction$throwError.getCursorFns(tree).value;
-
 	// resolve the url and return the full url
-	return function (k) {
-		return baseUrl + _getCursorFns$mapObj$navigatePath$callIfFunction$throwError.callIfFunction(url, k, getCursor && valFn(getCursor(k)));
+	return function () {
+		for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+			args[_key2] = arguments[_key2];
+		}
+
+		return baseUrl + _getCursorFns$mapObj$navigatePath$callIfFunction$throwError.callIfFunction.apply(undefined, [url].concat(args));
 	};
 };
 

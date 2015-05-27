@@ -87,12 +87,8 @@ describe('Actions', () => {
 				a.getUrl('qwe').should.eql('theUrl/qwe');
 			});
 			it('should return url with a base url specified', () => {
-				const a = new Actions({}, 'somePlace/', {url: k => `theUrl/${k}`});
-				a.getUrl('qwe', 'asd').should.eql('somePlace/theUrl/qwe');
-			});
-			it('should provide the tree value as the second argument', () => {
-				const a = new Actions({'qwe': 123}, '', {path: 'qwe', url: (k, v) => `theUrl/${k}/${v}`});
-				a.getUrl('qwe').should.eql('theUrl/qwe/123');
+				const a = new Actions({}, 'somePlace/', {url: (x, y) => `theUrl/${x}/${y}`});
+				a.getUrl('qwe', 'asd').should.eql('somePlace/theUrl/qwe/asd');
 			});
 		});
 	});
