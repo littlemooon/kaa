@@ -4,9 +4,12 @@ import {getCursorFns, mapObj, navigatePath, callIfFunction, throwError} from 'ju
 
 export default class Actions {
 
-	constructor(tree, baseUrl, definition, defaults) {
+	constructor(tree, baseUrl, definition, defaults, allActions = this) {
 		if (!tree) throwError(`Must provide a tree object to Actions that encapsulates all application state`);
 		const {path, url, actions} = definition ? definition : throwError(`Must provide a definition object to Actions that details all actions over the tree`);
+
+		// give access to the root actions node
+		this.getAllActions = () => allActions;
 
 		// give actions access to the whole tree
 		this.getTree = () => tree;
@@ -21,7 +24,7 @@ export default class Actions {
 		actions && this._setActions__(actions, defaults);
 
 		// set all remaining props on the definition to a prop on this
-		this._setChildren__(tree, baseUrl, definition, defaults);
+		this._setChildren__(tree, baseUrl, definition, defaults, allActions);
 	}
 
 	_setActions__(actions, defaults) {
@@ -33,12 +36,12 @@ export default class Actions {
 		);
 	}
 
-	_setChildren__(tree, baseUrl, definition, defaults) {
+	_setChildren__(tree, baseUrl, definition, defaults, allActions) {
 		const keyProps = ['path', 'url', 'actions'];
 
 		// create a new actions object and set a prop on this for each remaining prop in the definition
 		mapObj(definition, (v, k) =>
-			keyProps.indexOf(k) < 0 ? this[k] = new Actions(tree, baseUrl, v, defaults) : null
+			keyProps.indexOf(k) < 0 ? this[k] = new Actions(tree, baseUrl, v, defaults, allActions) : null
 		);
 	}
 }

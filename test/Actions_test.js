@@ -12,6 +12,18 @@ describe('Actions', () => {
 		});
 	});
 
+	describe('getAllActions function', () => {
+		it('should be defined', () => {
+			const a = new Actions({}, '', {});
+			a.getAllActions().should.eql(a);
+		});
+
+		it('should return all actions for a nested node', () => {
+			const a = new Actions({}, '', {child: {}});
+			a.child.getAllActions().should.eql(a);
+		});
+	});
+
 	describe('getTree function', () => {
 		it('should be defined', () => {
 			const tree = {qwe: 123};
